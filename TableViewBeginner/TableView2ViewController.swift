@@ -40,6 +40,7 @@ extension TableView2ViewController : UITableViewDataSource, UITableViewDelegate 
             cellid = "cell5"
         }
         let cell = tableView.dequeueReusableCell(withIdentifier: cellid) ?? UITableViewCell()
+       //dequeueReusableCellセルは利用可能なセルで一番上のセルが消えた時にキューの中に入ってまた使えるようにする？
         cell.textLabel?.text = "text1"
         cell.detailTextLabel?.text = "text2"
         return cell
