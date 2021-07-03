@@ -13,10 +13,14 @@ class SectionsAndCellsViewController: UIViewController {
     
     var sestion0 = ["a","b","c"]
     var sestion1 = ["あ","い","う"]
+    
+    @IBOutlet weak var tableView2: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.dataSource = self
         tableView.delegate =  self
+        tableView2.delegate = self
+        tableView2.dataSource = self
     }
     
 
@@ -25,7 +29,11 @@ class SectionsAndCellsViewController: UIViewController {
 extension SectionsAndCellsViewController : UITableViewDataSource , UITableViewDelegate {
     //セクションの数を決める下の関数だけでできないのかな？
     func numberOfSections(in tableView: UITableView) -> Int {
+        if tableView == self.tableView {
         return 2
+        } else {
+            return 1
+        }
 
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -37,6 +45,8 @@ extension SectionsAndCellsViewController : UITableViewDataSource , UITableViewDe
 //        } else {
 //            return 0
 //        }
+        //複数のtableViewを追加したのでifで切り替える
+        if tableView == self.tableView {
         switch section {
         case 0:
             return sestion0.count
@@ -44,6 +54,10 @@ extension SectionsAndCellsViewController : UITableViewDataSource , UITableViewDe
             return sestion1.count
         default:
             return 0
+        }
+        } else {
+            //tableView2の時のrowの数
+            return 15
         }
     }
     //センション毎にタイトルを設置する
@@ -55,14 +69,48 @@ extension SectionsAndCellsViewController : UITableViewDataSource , UITableViewDe
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "sestionCell")
             ?? UITableViewCell(style: .default, reuseIdentifier: "sestionCell")
+        let tableView2cell = tableView2.dequeueReusableCell(withIdentifier: "tableView2cell") ?? UITableViewCell()
         //sectionが０の時にsestion0に表示する
-        if indexPath.section == 0 {
-        cell.textLabel?.text = sestion0[indexPath.row]
+        if tableView == self.tableView {
+            switch indexPath.section {
+            case 0:
+                cell.textLabel?.text = sestion0[indexPath.row]
+            case 1:
+                cell.textLabel?.text = sestion1[indexPath.row]
+            default:
+                cell.textLabel?.text = "error"
+            }
+       
         } else {
-        cell.textLabel?.text = sestion1[indexPath.row]
+        
+            tableView2cell.textLabel?.text = "cell\(indexPath.row)"
+            
         }
-        return cell
+
+        //        switch section {
+//        case 0:
+//            cell.textLabel?.text = sestion0[indexPath.row]
+//            tableView2cell.textLabel?.text = "cell\(indexPath.row)"
+//        case 1:
+//            cell.textLabel?.text = sestion1[indexPath.row]
+//        default:
+//            cell.textLabel?.text = "error"
+//        }
+       // tableView2cell.largeContentTitle = "a"
+       
+        
+       //セルの名前を一緒にしたらこれはしなくてもいい
+        if tableView == self.tableView {
+           
+            return cell
+        
+        } else {
+            
+            return tableView2cell
+        }
+        
     }
+    
     
     
 
